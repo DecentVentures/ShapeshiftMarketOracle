@@ -28,17 +28,17 @@ function isActive(coin) {
 }
 
 function toMarketInfo(market, coins) {
-  let bothCoinNames = coin.pair.split('_');
+  let bothCoinNames = market.pair.split('_');
   let coin1 = coins[bothCoinNames[0]];
   let coin2 = coins[bothCoinNames[1]];
   let active = isActive(coin1) && isActive(coin2);
 
   return {
-    pair: coin.pair,
-    ratePPM: toPPB(coin.rate),
-    limitPPM: toPPB(coin.limit),
-    minPPM: toPPB(coin.min),
-    minerFeePPM: toPPB(coin.minerFee),
+    pair: market.pair,
+    ratePPM: toPPB(market.rate),
+    limitPPM: toPPB(market.limit),
+    minPPM: toPPB(market.min),
+    minerFeePPM: toPPB(market.minerFee),
     active: active
   }
 }
@@ -48,30 +48,30 @@ async function getCoinMarketInfo() {
   let coins = await getCoins();
   let marketInfo = await getMarketInfo();
 
-  let getMarketInfo = (market) => toMarketInfo(market, coins);
-  let coinMarketInfo = marketInfo.map(getMarketInfo);
+  let getInfo = (market) => toMarketInfo(market, coins);
+  let coinMarketInfo = marketInfo.map(getInfo);
 
   return coinMarketInfo;
 }
 
 
 // Script takes in 4 ENV variables
-// a required ORACLE_ADDR 
-// an optional ORACLE_COIN 
-// an optional ETH_ACCOUNT 
+// a required ORACLE_ADDR
+// an optional ORACLE_COIN
+// an optional ETH_ACCOUNT
 // an optional GAS_PRICE
 // If oracle coin is provided, the oracle will only hold data for that coin
 function main() {
   let oracleAddr = process.env.ORACLE_ADDR;
   let coinFilter = process.env.ORACLE_COIN;
 	let gasPrice = process.env.GAS_PRICE;
-	let account = process.env.ETH_ACCOUNT || web3.eth.accounts[0];
-  let oracleContract = web3.eth.contract(shapeshiftOracle.abi).at(oracleAddr);
+	//let account = process.env.ETH_ACCOUNT || web3.eth.accounts[0];
+  //let oracleContract = web3.eth.contract(shapeshiftOracle.abi).at(oracleAddr);
 
   getCoinMarketInfo().then((coinMarkets) => {
     let isPairedWith = (coin) => pairOf(coin, coinFilter);
 		// filter out coins not related to the ORACLE_COIN
-    let filteredMarkets = ORACLE_COIN ? coinMarkets.filter(isPairedWith) : coinMarkets;
+    let filteredMarkets = coinFilter != null ? coinMarkets.filter(isPairedWith) : coinMarkets;
 		console.log(filteredMarkets);
 
 /*
