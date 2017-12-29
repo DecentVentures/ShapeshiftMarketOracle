@@ -52,6 +52,27 @@ There are two contracts used in tandem for this project
   
 ```
 
+
+## Oracle Price Updating 
+
+This project comes with an oracle.js file that is meant to update the oracle contract with prices on an interval. 
+
+This code must be ran from a machine with a web3 connection and enough ether to pay the gas. 
+Currently the code just prints the output. 
+This is an example of the code used to update an oracle with ETH only prices.
+
+
+```
+ORACLE_COIN="eth" node oracle.js
+```
+
+* TODO: Create arrays for the bulk function calls.
+* TODO: Test gas costs for bulk function calls and figure out what the max size can be per transaction
+* TODO: Find a gas price and schedule to fit within the budget of this project ($100 per year)
+* TODO: Deploy this to VPS with a web3 connection
+
+
+
 Cheers,
 
 0x6e80C53f2cdCad7843aD765E4918298427AaC550
