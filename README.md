@@ -36,6 +36,7 @@ There are two contracts used in tandem for this project
 ```
   // Note that the market is not active above
   // ShapeshiftHolding(address oracle, bytes32 pairName, address shiftAddr)
+  
   ShapeshiftHolding("0x1234", "ETH_ZRX", "shapeshift ether deposit address");
   send(1 ether, ShapeshiftHolding);
   ShapeshiftHolding.toShapeshift();
@@ -43,6 +44,7 @@ There are two contracts used in tandem for this project
   // 0x0 Transaction mined but execution failed
   
   // Make the market active again
+  
   ShapeshiftOracle.updateMarket("ETH_ZRX",1071518913660,6767770260,9885570,5420000000, true);
   ShapeshiftHolding.toShapeshift();
   
