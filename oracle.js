@@ -1,8 +1,8 @@
-let shapeshiftOracle = artifacts.require('./contracts/ShapeshiftOracle.sol');
+//let shapeshiftOracle = artifacts.require('./contracts/ShapeshiftOracle.sol');
 
 let request = require('request-promise');
-let web3 = require('web3');
-const MILLION = 1000000;
+//let web3 = require('web3');
+const BILLION = 1000000000;
 
 function getMarketInfo() {
   let url = 'https://shapeshift.io/marketinfo/';
@@ -19,8 +19,8 @@ function pairOf(coin, coinName) {
   return pair.indexOf(coinName.toUpperCase()) == 0;
 }
 
-function toPPM(value) {
-  return Number(value) * MILLION;
+function toPPB(value) {
+  return Number(value) * BILLION;
 }
 
 function isActive(coin) {
@@ -35,10 +35,10 @@ function toMarketInfo(market, coins) {
 
   return {
     pair: coin.pair,
-    ratePPM: toPPM(coin.rate),
-    limitPPM: toPPM(coin.limit),
-    minPPM: toPPM(coin.min),
-    minerFeePPM: toPPM(coin.minerFee),
+    ratePPM: toPPB(coin.rate),
+    limitPPM: toPPB(coin.limit),
+    minPPM: toPPB(coin.min),
+    minerFeePPM: toPPB(coin.minerFee),
     active: active
   }
 }
@@ -72,13 +72,16 @@ function main() {
     let isPairedWith = (coin) => pairOf(coin, coinFilter);
 		// filter out coins not related to the ORACLE_COIN
     let filteredMarkets = ORACLE_COIN ? coinMarkets.filter(isPairedWith) : coinMarkets;
+		console.log(filteredMarkets);
 
-		let sendOptions = {from: account};
-		if(gasPrice) {
-			sendOptions.gasPrice = gasPrice;
-		}
-
-    oracleContract.updateMarkets(filteredMarkets).send(sendOptions)
+/*
+ *    let sendOptions = {from: account};
+ *    if(gasPrice) {
+ *      sendOptions.gasPrice = gasPrice;
+ *    }
+ *
+ *    oracleContract.updateMarkets(filteredMarkets).send(sendOptions)
+ */
   });
 }
 

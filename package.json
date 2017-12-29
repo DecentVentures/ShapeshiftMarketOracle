@@ -1,0 +1,28 @@
+{
+  "name": "shapeshift-oracle",
+  "version": "1.0.0",
+  "description": "Smart contract for storing market data for shapeshift, and javascript cron to update it",
+  "main": "oracle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DecentVentures/ShapeshiftMarketOracle.git"
+  },
+  "keywords": [
+    "shapeshift",
+    "ethereum",
+    "node",
+    "oracle"
+  ],
+  "author": "Micah Riggan <micahriggan@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DecentVentures/ShapeshiftMarketOracle/issues"
+  },
+  "homepage": "https://github.com/DecentVentures/ShapeshiftMarketOracle#readme"
+}

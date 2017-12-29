@@ -3,39 +3,46 @@ import "./ShapeshiftOracle.sol";
 
 contract ShapeshiftHolding {
 	ShapeshiftOracle marketOracle;
-	uint MILLION constant;
+	uint constant BILLION = 1000000000;
 
-	bytes32 pair;
-	address shapeshiftAddr;
-	address owner;
+	bytes32 public _pair;
+	address public _shapeshiftAddr;
+	address public _owner;
 
-	function ShapeshiftHolding(bytes32 pairName, address shiftAddr) {
-		owner = msg.sender;
-		pair = pairName;
-		shapeshiftAddr = shiftAddr;
+	function ShapeshiftHolding(address oracle, bytes32 pairName, address shiftAddr) public {
+		_owner = msg.sender;
+		_pair = pairName;
+		_shapeshiftAddr = shiftAddr;
+		marketOracle = ShapeshiftOracle(oracle);
 	}
 
 	modifier isOwner() {
-		require(owner == msg.sender);
+		require(_owner == msg.sender);
 		_;
 	}
 	modifier canSend() {
-		require(marketOracle.markets[pair]);
-		require(marketOracle.markets[pair].active);
-		require(this.balance ether * MILLION  > marketOracle.markets[pair].minPPM); 
-		require(this.balance ether * MILLION  < marketOracle.markets[pair].limitPPM); 
+		var (pair, ratePPB, limitPPB, minPPB, minerFeePPB, active) = marketOracle.markets(_pair);
+		require(pair != 0);
+		require(active);
+		require(this.balance / BILLION  > minPPB);
+		require(this.balance / BILLION  < limitPPB);
 		_;
 	}
 
-	function toShapeshift() canSend {
-		uint limit = marketOracle.markets[pair].limitPPM;
-		if(this.balance ether * MILLION > limit) {
-			shapeshiftAddr.transfer(limit ether / MILLION);
-		}	
+	function toShapeshift() canSend public{
+		var (,,limit,,,) = marketOracle.markets(_pair);
+		if(this.balance / BILLION > limit) {
+			_shapeshiftAddr.transfer(limit / BILLION);
+		}	else {
+			_shapeshiftAddr.transfer(this.balance);
+		}
 	}
 
-	function widthdraw(address to, uint wei) isOwner {
-		to.transfer(wei);	
+	function widthdraw(address to, uint amount) isOwner public {
+		to.transfer(amount);
+	}
+
+	function widthdrawAll(address to) isOwner public {
+		to.transfer(this.balance);
 	}
 }
-
