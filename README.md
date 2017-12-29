@@ -75,6 +75,15 @@ ORACLE_COIN="eth" node oracle.js
 
 
 
+## Gas Costs
+* Bulk Updates
+  * Create Cost : 149458
+  * Update Cost : 30517-54775
+* Single Updates
+  * Create cost: 145248
+  * Update Cost: 26179-50437
+
+
 Cheers,
 
 0x6e80C53f2cdCad7843aD765E4918298427AaC550
