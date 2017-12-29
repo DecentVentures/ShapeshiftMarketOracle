@@ -42,6 +42,7 @@ There are two contracts used in tandem for this project
   
   // 0x0 Transaction mined but execution failed
   
+  // Make the market active again
   ShapeshiftOracle.updateMarket("ETH_ZRX",1071518913660,6767770260,9885570,5420000000, true);
   ShapeshiftHolding.toShapeshift();
   
@@ -51,6 +52,7 @@ There are two contracts used in tandem for this project
   
 ```
 
-Cheers
+Cheers,
+
 0x6e80C53f2cdCad7843aD765E4918298427AaC550
   
