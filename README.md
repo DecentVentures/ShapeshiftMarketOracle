@@ -1,5 +1,8 @@
-# ShapeshiftMarketOracle
+# Shapeshift Market Oracle + Safe Send Contract
 A smart contract that can hold the current market rates for shapeshift. Intended to be used by other contracts.
+Secondly ShapeshiftHolding, a contract that won't send to shapeshift:
+  * if the balance isn't high enough
+  * if the market pair isn't active.
 
 # Usage
 There are two contracts used in tandem for this project
@@ -82,6 +85,17 @@ ORACLE_COIN="eth" node oracle.js
 * Single Updates
   * Create cost: 145248
   * Update Cost: 26179-50437
+* All 55 ethereum markets
+  * Updating : ~3,000,000
+* All 40 Active ETH pairings
+  * Updating ~2,400,000
+
+## USD Cost Estimates
+1 Full Update : $4
+
+Once per day  : $1460 / year
+
+Twice per day : $2920 / year
 
 
 Cheers,
