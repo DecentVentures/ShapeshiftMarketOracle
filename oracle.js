@@ -35,10 +35,10 @@ function toMarketInfo(market, coins) {
 
   return {
     pair: market.pair,
-    ratePPM: toPPB(market.rate),
-    limitPPM: toPPB(market.limit),
-    minPPM: toPPB(market.min),
-    minerFeePPM: toPPB(market.minerFee),
+    ratePPB: toPPB(market.rate),
+    limitPPB: toPPB(market.limit),
+    minPPB: toPPB(market.min),
+    minerFeePPB: toPPB(market.minerFee),
     active: active
   }
 }
