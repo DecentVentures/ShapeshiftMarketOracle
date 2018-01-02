@@ -1,5 +1,5 @@
-var Migrations = artifacts.require("./Migrations.sol");
+var ShapeshiftOracle = artifacts.require("./ShapeshiftOracle.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Migrations);
+  deployer.deploy(ShapeshiftOracle);
 };

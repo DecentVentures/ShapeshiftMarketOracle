@@ -20,7 +20,7 @@ function pairOf(coin, coinName) {
 }
 
 function toPPB(value) {
-  return Number(value) * BILLION;
+  return Math.floor(Number(value) * BILLION);
 }
 
 function isActive(coin) {
@@ -54,6 +54,14 @@ async function getCoinMarketInfo() {
   return coinMarketInfo;
 }
 
+function getFilteredMarkets(coinFilter) {
+  return getCoinMarketInfo().then((coinMarkets) => {
+    let isPairedWith = (coin) => pairOf(coin, coinFilter);
+    // filter out coins not related to the ORACLE_COIN
+    let filteredMarkets = coinFilter != null ? coinMarkets.filter(isPairedWith) : coinMarkets;
+    return filteredMarkets;
+  });
+};
 
 // Script takes in 4 ENV variables
 // a required ORACLE_ADDR
@@ -64,25 +72,22 @@ async function getCoinMarketInfo() {
 function main() {
   let oracleAddr = process.env.ORACLE_ADDR;
   let coinFilter = process.env.ORACLE_COIN;
-	let gasPrice = process.env.GAS_PRICE;
-	//let account = process.env.ETH_ACCOUNT || web3.eth.accounts[0];
+  let gasPrice = process.env.GAS_PRICE;
+  //let account = process.env.ETH_ACCOUNT || web3.eth.accounts[0];
   //let oracleContract = web3.eth.contract(shapeshiftOracle.abi).at(oracleAddr);
-
-  getCoinMarketInfo().then((coinMarkets) => {
-    let isPairedWith = (coin) => pairOf(coin, coinFilter);
-		// filter out coins not related to the ORACLE_COIN
-    let filteredMarkets = coinFilter != null ? coinMarkets.filter(isPairedWith) : coinMarkets;
-		console.log(filteredMarkets);
-
-/*
- *    let sendOptions = {from: account};
- *    if(gasPrice) {
- *      sendOptions.gasPrice = gasPrice;
- *    }
- *
- *    oracleContract.updateMarkets(filteredMarkets).send(sendOptions)
- */
+  //
+  getFilteredMarkets(coinFilter).then((filteredMarkets) => {
+    console.log(filteredMarkets);
   });
+
+  /*
+   *    let sendOptions = {from: account};
+   *    if(gasPrice) {
+   *      sendOptions.gasPrice = gasPrice;
+   *    }
+   *
+   *    oracleContract.updateMarkets(filteredMarkets).send(sendOptions)
+   */
 }
 
 main();
