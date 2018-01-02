@@ -33,11 +33,9 @@ contract ShapeshiftHolding {
   function toShapeshift() canSend public{
     var (,,limit,,,) = marketOracle.markets(_pair);
     if(this.balance / BILLION > limit) {
-      _shapeshiftAddr.transfer(limit * BILLION);
-      Widthdraw(limit * BILLION, _shapeshiftAddr);
+      widthdraw(_shapeshiftAddr, limit * BILLION);
     } else {
-      Widthdraw(this.balance, _shapeshiftAddr);
-      _shapeshiftAddr.transfer(this.balance);
+      widthdrawAll(_shapeshiftAddr);
     }
   }
 
@@ -46,8 +44,8 @@ contract ShapeshiftHolding {
   }
 
   function widthdraw(address to, uint amount) isOwner public {
-    to.transfer(amount);
     Widthdraw(this.balance, to);
+    to.transfer(amount);
   }
 
   function widthdrawAll(address to) isOwner public {

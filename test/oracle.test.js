@@ -1,3 +1,4 @@
+let { updateMarket, updateMarkets } = require('../oracle');
 let oracle = artifacts.require('./ShapeshiftOracle.sol');
 const BILLION = 1000000000;
 
@@ -25,21 +26,6 @@ let market = {
 };
 
 let {pair, ratePPB, limitPPB, minPPB, minerFeePPB, active} = market;
-
-function updateMarket(oracleInstance, marketData) {
-  let {pair, ratePPB, limitPPB, minPPB, minerFeePPB, active} = marketData;
-  return oracleInstance.updateMarket(pair, ratePPB, limitPPB, minPPB, minerFeePPB, active);
-}
-
-function updateMarkets(oracleInstance, markets) {
-  let pairs = markets.map((mkt) => mkt.pair);
-  let rates = markets.map((mkt) => mkt.ratePPB);
-  let limits = markets.map((mkt) => mkt.limitPPB);
-  let mins = markets.map((mkt) => mkt.minPPB);
-  let minerFees = markets.map((mkt) => mkt.minerFeePPB);
-  let statuses = markets.map((mkt) => mkt.active);
-  return oracleInstance.updateMarkets(pairs, rates, limits, mins, minerFees, statuses);
-}
 
 describe("Shapeshift market oracle", () => {
 

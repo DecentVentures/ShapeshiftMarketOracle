@@ -61,7 +61,23 @@ function getFilteredMarkets(coinFilter) {
     let filteredMarkets = coinFilter != null ? coinMarkets.filter(isPairedWith) : coinMarkets;
     return filteredMarkets;
   });
-};
+}
+;
+
+function updateMarket(oracleInstance, marketData) {
+  let {pair, ratePPB, limitPPB, minPPB, minerFeePPB, active} = marketData;
+  return oracleInstance.updateMarket(pair, ratePPB, limitPPB, minPPB, minerFeePPB, active);
+}
+
+function updateMarkets(oracleInstance, markets) {
+  let pairs = markets.map((mkt) => mkt.pair);
+  let rates = markets.map((mkt) => mkt.ratePPB);
+  let limits = markets.map((mkt) => mkt.limitPPB);
+  let mins = markets.map((mkt) => mkt.minPPB);
+  let minerFees = markets.map((mkt) => mkt.minerFeePPB);
+  let statuses = markets.map((mkt) => mkt.active);
+  return oracleInstance.updateMarkets(pairs, rates, limits, mins, minerFees, statuses);
+}
 
 // Script takes in 4 ENV variables
 // a required ORACLE_ADDR
@@ -80,14 +96,21 @@ function main() {
     console.log(filteredMarkets);
   });
 
-  /*
-   *    let sendOptions = {from: account};
-   *    if(gasPrice) {
-   *      sendOptions.gasPrice = gasPrice;
-   *    }
-   *
-   *    oracleContract.updateMarkets(filteredMarkets).send(sendOptions)
-   */
+/*
+ *    let sendOptions = {from: account};
+ *    if(gasPrice) {
+ *      sendOptions.gasPrice = gasPrice;
+ *    }
+ *
+ *    oracleContract.updateMarkets(filteredMarkets).send(sendOptions)
+ */
 }
 
-main();
+if (require.main == module) {
+  main();
+}
+
+module.exports = {
+  updateMarket,
+  updateMarkets
+};
