@@ -9,6 +9,7 @@ contract ShapeshiftHolding {
   address public _shapeshiftAddr;
   address public _owner;
   event Deposit(uint amount, address sender);
+  event Widthdraw(uint amount, address to);
 
   function ShapeshiftHolding(address oracle, bytes32 pairName, address shiftAddr) public {
     _owner = msg.sender;
@@ -26,15 +27,16 @@ contract ShapeshiftHolding {
     require(pair != 0);
     require(active);
     require(this.balance / BILLION  > minPPB);
-    require(this.balance / BILLION  < limitPPB);
     _;
   }
 
   function toShapeshift() canSend public{
     var (,,limit,,,) = marketOracle.markets(_pair);
     if(this.balance / BILLION > limit) {
-      _shapeshiftAddr.transfer(limit / BILLION);
+      _shapeshiftAddr.transfer(limit * BILLION);
+      Widthdraw(limit * BILLION, _shapeshiftAddr);
     } else {
+      Widthdraw(this.balance, _shapeshiftAddr);
       _shapeshiftAddr.transfer(this.balance);
     }
   }
@@ -45,9 +47,10 @@ contract ShapeshiftHolding {
 
   function widthdraw(address to, uint amount) isOwner public {
     to.transfer(amount);
+    Widthdraw(this.balance, to);
   }
 
   function widthdrawAll(address to) isOwner public {
-    to.transfer(this.balance);
+    widthdraw(to, this.balance);
   }
 }
